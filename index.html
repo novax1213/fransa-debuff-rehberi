@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fransa Debuff Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, a summary table first, then one dossier entry per national spirit. */
+:root {
+  --paper: #f3f5f7;
+  --ink: #1d2733;
+  --muted: #586472;
+  --line: #cfd6de;
+  --horizon: #5b7fa6;
+  --horizon-soft: #e1e9f2;
+  --ok: #2f7a4f;
+  --ok-soft: #dcefe3;
+  --part: #9a6a12;
+  --part-soft: #f6ead2;
+  --no: #a33a32;
+  --no-soft: #f5dfdc;
+  --card: #ffffff;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131a22; --ink: #e3e9ef; --muted: #9aa7b5; --line: #2b3642;
+    --horizon: #8fb0d4; --horizon-soft: #1d2a38;
+    --ok: #7cc79b; --ok-soft: #173326; --part: #e0b45e; --part-soft: #352a14;
+    --no: #ee8c84; --no-soft: #3a1d1b; --card: #18212b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #131a22; --ink: #e3e9ef; --muted: #9aa7b5; --line: #2b3642;
+  --horizon: #8fb0d4; --horizon-soft: #1d2a38;
+  --ok: #7cc79b; --ok-soft: #173326; --part: #e0b45e; --part-soft: #352a14;
+  --no: #ee8c84; --no-soft: #3a1d1b; --card: #18212b; color-scheme: dark;
+}
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 18px; padding-block: 36px 64px; display: grid; gap: 40px; }
+header { display: grid; gap: 10px; border-bottom: 3px solid var(--horizon); padding-bottom: 20px; }
+.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--horizon); font-size: 15px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(36px, 7vw, 56px); line-height: 1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 28px; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 24px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 66ch; }
+.lead { color: var(--muted); font-size: 17px; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 18px; font-size: 14px; color: var(--muted); }
+.chip { display: inline-block; font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 9px; border-radius: 3px; white-space: nowrap; }
+.chip.ok { color: var(--ok); background: var(--ok-soft); }
+.chip.part { color: var(--part); background: var(--part-soft); }
+.chip.no { color: var(--no); background: var(--no-soft); }
+section { display: grid; gap: 16px; }
+.table-box { overflow-x: auto; border: 1px solid var(--line); background: var(--card); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--display); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 14px; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td a { color: var(--horizon); }
+.entries { display: grid; gap: 22px; }
+.entry { background: var(--card); border: 1px solid var(--line); padding: 18px 18px 20px; display: grid; gap: 12px; min-width: 0; }
+.entry-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; }
+.fr { font-style: italic; color: var(--muted); font-size: 14px; }
+.effects { display: flex; flex-wrap: wrap; gap: 6px; }
+.fx { font-family: var(--mono); font-size: 13px; padding: 2px 7px; border: 1px solid var(--line); border-radius: 3px; font-variant-numeric: tabular-nums; }
+.label { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; color: var(--horizon); }
+ol, ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 66ch; }
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.path { border-left: 3px solid var(--horizon); background: var(--horizon-soft); padding: 8px 10px; display: grid; gap: 2px; min-width: 0; }
+.path b { font-family: var(--display); font-weight: 600; font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.focus { font-weight: 600; }
+.note { border-left: 3px solid var(--line); padding-left: 12px; color: var(--muted); font-size: 15px; }
+footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AGORA Sub mod [hegamon] · Fransa</div>
+    <h1>Fransa Debuff Rehberi</h1>
+    <p class="lead">Fransa oyuna birçok olumsuz ulusal ruhla başlıyor. Bu sayfa hangisinin ne yaptığını ve hangi focus ya da kararla kalktığını gösteriyor. Focus adları oyundaki İngilizce adlarıyla yazıldı.</p>
+    <div class="legend">
+      <span><span class="chip ok">Kaldırılabilir</span> tamamen kalkıyor</span>
+      <span><span class="chip part">Kısmen</span> azalıyor ya da sadece bir yolda kalkıyor</span>
+      <span><span class="chip no">Yolu yok</span> şu an kaldıran bir şey yok</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="ozet">
+    <h2 id="ozet">Özet</h2>
+    <div class="table-box">
+      <table>
+        <thead><tr><th>Debuff</th><th>Nasıl kalkar</th><th>Durum</th></tr></thead>
+        <tbody>
+          <tr><td><a href="#disjointed">Disjointed Government</a></td><td>Seçtiğin siyasi yolun ilk büyük focusu</td><td><span class="chip ok">Kaldırılabilir</span></td></tr>
+          <tr><td><a href="#staff">Complacent General Staff</a></td><td>2 focus, Army Reform, sonra 3 kez karar</td><td><span class="chip ok">Kaldırılabilir</span></td></tr>
+          <tr><td><a href="#economy">Inefficient Economy</a></td><td>Modernize the Economy kararı, 2 kez</td><td><span class="chip ok">Kaldırılabilir</span></td></tr>
+          <tr><td><a href="#strikes">Factory Strikes</a></td><td>Reform the Labour Laws (sol yol)</td><td><span class="chip part">Kısmen</span></td></tr>
+          <tr><td><a href="#coup">Coup during the elections</a></td><td>80 günde kendiliğinden biter</td><td><span class="chip ok">Kaldırılabilir</span></td></tr>
+          <tr><td><a href="#ww1">Scars of the Great War</a></td><td>Laissez-Faire ile hafifler</td><td><span class="chip part">Kısmen</span></td></tr>
+          <tr><td><a href="#modifiers">Ordu, hava ve deniz cezaları</a></td><td>Review the role of Radio / Tanks</td><td><span class="chip part">Kısmen</span></td></tr>
+          <tr><td><a href="#tensions">Army-Government Tensions</a></td><td>—</td><td><span class="chip no">Yolu yok</span></td></tr>
+          <tr><td><a href="#radios">Doctrinal Misuse of Radios</a></td><td>—</td><td><span class="chip no">Yolu yok</span></td></tr>
+          <tr><td><a href="#air">Inefficient Aeronautical Industry</a></td><td>—</td><td><span class="chip no">Yolu yok</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="detay">
+    <h2 id="detay">Tek tek</h2>
+    <div class="entries">
+
+      <article class="entry" id="disjointed">
+        <div class="entry-head"><h3>Disjointed Government</h3><span class="chip ok">Kaldırılabilir</span></div>
+        <div class="effects"><span class="fx">Günlük PP −0,80</span><span class="fx">İstikrar −%25</span><span class="fx">Teslim limiti −%15</span></div>
+        <p>Oyun başında var. Halk Cephesi olayları sırasında değerleri biraz değişebilir. Seçtiğin yola göre şu focus bunu tamamen kaldırır:</p>
+        <div class="paths">
+          <div class="path"><b>Demokrat</b><span class="focus">Gaston Doumergue's Reform Project</span></div>
+          <div class="path"><b>Komünist</b><span class="focus">Invite Communist Ministers</span><span>ya da Force the Issue</span></div>
+          <div class="path"><b>Faşist</b><span class="focus">Political Unity</span></div>
+          <div class="path"><b>Kralcı</b><span class="focus">Repeal the Law of Exile</span></div>
+          <div class="path"><b>Bonapartist</b><span class="focus">The Napoleon Referendum</span></div>
+        </div>
+        <p class="note">The Napoleon Referendum ayrıca Weak Bonapartist Legitimacy verir: PP maliyeti −0,25, seferberlik hızı +%10, teslim limiti +%60, danışman maliyeti −%10.</p>
+      </article>
+
+      <article class="entry" id="staff">
+        <div class="entry-head"><h3>Complacent General Staff</h3><span class="chip ok">Kaldırılabilir</span></div>
+        <div class="effects"><span class="fx">Planlama hızı −%15</span><span class="fx">Ordu savunması −%7,5</span><span class="fx">Tank hızı ve saldırısı −%5</span><span class="fx">Tank maliyeti +%25</span><span class="fx">Ekipman dönüşümü −%20</span></div>
+        <p>Dört adımda kalkar:</p>
+        <ol>
+          <li><span class="focus">Review the role of Radio</span> ve <span class="focus">Review the role of Tanks</span> focuslarını al. Her biri debuff'ı bir kademe hafifletir.</li>
+          <li>İkisinden sonra açılan <span class="focus">Army Reform</span> focusunu al.</li>
+          <li>Kararlar menüsünde <b>Reform of the General Staff</b> kategorisi açılır. Oradaki <span class="focus">Retire the Old Guard</span> kararını 3 kez al. Her seferinde 50 PP, aralarında 15 gün bekleme var.</li>
+          <li>Üçüncü seferde debuff tamamen kalkar.</li>
+        </ol>
+        <p class="note">Army Reform ayrıca Gamelin'i Chief of Army koltuğundan alır. Bir sonraki Chief of Army ataması bedava, sonrakiler 150 PP.</p>
+      </article>
+
+      <article class="entry" id="economy">
+        <div class="entry-head"><h3>Inefficient Economy</h3><span class="chip ok">Kaldırılabilir</span></div>
+        <div class="effects"><span class="fx">Tüketim malları +%40</span><span class="fx">Fabrika çıktısı −%20</span><span class="fx">Tersane çıktısı −%20</span></div>
+        <p>İki yol var, birlikte de kullanılabilir:</p>
+        <ul>
+          <li><b>Hızlı yol:</b> Ekonomi dalında <span class="focus">Socialist Policies</span>, <span class="focus">Capitalists Policies</span> ya da <span class="focus">Third Position</span> focuslarından birini al. Reform of the General Staff kategorisinde <span class="focus">Modernize the Economy</span> kararı açılır. İlk seferde bütün etkiler yarıya iner, ikinci seferde debuff tamamen kalkar. Her biri 100 PP, aralarında 15 gün var.</li>
+          <li><b>Yavaş yol:</b> Economic Policy kategorisinde <span class="focus">Grow our Civilian Economy</span> ve <span class="focus">Grow our Arms Sector</span> kararları var. Her biri 10 PP. Her alışta tüketim malları %2 azalır, fabrika ve tersane çıktısı %1 artar. Sivil karar için sivil fabrika sayın 29'dan fazla olmalı ve her alışta eşik 5 artar. Askeri karar için askeri fabrikan 14'ten fazla olmalı ve eşik her seferinde 10 artar.</li>
+        </ul>
+      </article>
+
+      <article class="entry" id="strikes">
+        <div class="entry-head"><h3>Factory Strikes</h3><span class="chip part">Kısmen</span></div>
+        <div class="effects"><span class="fx">Fabrika çıktısı −%50</span><span class="fx">Tersane çıktısı −%50</span></div>
+        <p>Halk Cephesi seçimi kazanınca gelen olayla eklenir, oyunun başında yoktur.</p>
+        <ul>
+          <li><span class="focus">Reform the Labour Laws</span> focusu kaldırır. Socialist Policies'ten sonra gelir. Alabilmek için Halk Cephesi'nin 100'den fazla sandalyesi ve Senato desteğinin %60 ya da üstü olması gerekir.</li>
+          <li>Diğer siyasi yollarda bunu kaldıran bir focus yok.</li>
+        </ul>
+      </article>
+
+      <article class="entry" id="coup">
+        <div class="entry-head"><h3>Coup during the elections</h3><span class="chip ok">Kaldırılabilir</span></div>
+        <div class="effects"><span class="fx">PP maliyeti +0,20</span><span class="fx">İstikrar −%10</span><span class="fx">Teslim limiti −%20</span><span class="fx">Demokrasi desteği −0,03/gün</span></div>
+        <p>Kralcı ya da Bonapartist darbe olayıyla gelir ve 80 gün sürer. Süre dolunca kendiliğinden kalkar. Bonapartist yolda <span class="focus">Restore Order</span> focusu süreyi beklemeden kaldırır.</p>
+      </article>
+
+      <article class="entry" id="ww1">
+        <div class="entry-head"><h3>Scars of the Great War</h3><span class="chip part">Kısmen</span></div>
+        <div class="effects"><span class="fx">Askere alma −%25</span><span class="fx">Savaş desteği −%20</span></div>
+        <p>Ekonomi dalındaki <span class="focus">Laissez-Faire</span> focusundan 2 yıl sonra bir olay gelir. Bu olay debuff'ı <b>Recovering from the Great War</b> ile değiştirir; askere alma cezası kalkar, sadece −%20 savaş desteği kalır. Tamamen kaldıran bir yol şu an yok.</p>
+      </article>
+
+      <article class="entry" id="modifiers">
+        <div class="entry-head"><h3>Ordu, hava ve deniz cezaları</h3><span class="chip part">Kısmen</span></div>
+        <p>Fransa'nın Ordu, Hava ve Deniz ulusal ruhlarında bazı bonuslar ve bazı cezalar bir arada var.</p>
+        <ul>
+          <li><span class="focus">Review the role of Radio</span>: kara doktrini maliyetini +%100'den −%20'ye, kara ustalığı kazancını −%15'ten +%20'ye çevirir.</li>
+          <li><span class="focus">Review the role of Tanks</span>: askere alma cezasını bonusa çevirir.</li>
+          <li>Hava cezaları (hava doktrini +%50, görev verimi −%10, CAS −%25) ve deniz cezaları (tespit, menzil, konvoy baskını −%5) için şu an bir yol yok.</li>
+        </ul>
+      </article>
+
+      <article class="entry" id="tensions">
+        <div class="entry-head"><h3>Army-Government Tensions</h3><span class="chip no">Yolu yok</span></div>
+        <div class="effects"><span class="fx">Savaş desteği −%5</span><span class="fx">Ordu tecrübesi −%10</span><span class="fx">Chief of Army maliyeti +%25</span><span class="fx">Ekipman yükseltme tecrübesi +%15</span></div>
+        <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var, Fransa o ağacı kullanmıyor. Chief of Army zammı Army Reform'dan sonra dengeleniyor.</p>
+      </article>
+
+      <article class="entry" id="radios">
+        <div class="entry-head"><h3>Doctrinal Misuse of Radios</h3><span class="chip no">Yolu yok</span></div>
+        <div class="effects"><span class="fx">Elektronik araştırması −%10</span><span class="fx">Takviye oranı −%3</span></div>
+        <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var.</p>
+      </article>
+
+      <article class="entry" id="air">
+        <div class="entry-head"><h3>Inefficient Aeronautical Industry</h3><span class="chip no">Yolu yok</span></div>
+        <div class="effects"><span class="fx">Avcı / küçük gövde +%15 maliyet</span><span class="fx">Taktik bombardıman / orta gövde +%10 maliyet</span></div>
+        <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>"Yolu yok" olanlar alt modun bir sonraki sürümünde uygun focuslara bağlanabilir.</p>
+    <p>Bu bilgiler alt modun dosyalarından çıkarıldı. Değerler olaylarla biraz değişebilir.</p>
+  </footer>
+</div>
+</body>
+</html>
