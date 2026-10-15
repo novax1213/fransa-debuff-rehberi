@@ -76,6 +76,17 @@ ol, ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 66ch
 .note { border-left: 3px solid var(--line); padding-left: 12px; color: var(--muted); font-size: 15px; }
 footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
 a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
+.search { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: var(--paper); padding-block: 12px; border-bottom: 1px solid var(--line); display: grid; gap: 6px; }
+.search label { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: 14px; color: var(--horizon); }
+.search-row { display: flex; gap: 8px; min-width: 0; }
+.search input { flex: 1; min-width: 0; font: inherit; font-size: 17px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 4px; background: var(--card); color: var(--ink); }
+.search input:focus-visible { outline: none; border-color: var(--horizon); }
+.search button { font-family: var(--display); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 15px; padding: 0 14px; border: 2px solid var(--line); border-radius: 4px; background: var(--card); color: var(--muted); cursor: pointer; }
+.search button:hover { color: var(--ink); border-color: var(--horizon); }
+.search button:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
+.count { font-size: 14px; color: var(--muted); min-height: 1.4em; }
+.empty { background: var(--card); border: 1px dashed var(--line); padding: 18px; color: var(--muted); }
+[hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -91,6 +102,15 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
       <span><span class="chip no">Yolu yok</span> şu an kaldıran bir şey yok</span>
     </div>
   </header>
+
+  <div class="search" role="search">
+    <label for="q">Debuff ara</label>
+    <div class="search-row">
+      <input id="q" type="search" placeholder="Örn. grev, radyo, ekonomi, Disjointed" autocomplete="off" spellcheck="false">
+      <button id="clear" type="button">Temizle</button>
+    </div>
+    <p id="count" class="count" aria-live="polite">Türkçe ya da oyundaki İngilizce adını yaz.</p>
+  </div>
 
   <section aria-labelledby="ozet">
     <h2 id="ozet">Özet</h2>
@@ -115,9 +135,10 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
 
   <section aria-labelledby="detay">
     <h2 id="detay">Tek tek</h2>
+    <p id="empty" class="empty" hidden>Bu adla bir debuff bulunamadı. Başka bir kelime dene, örneğin "ekonomi" ya da "grev".</p>
     <div class="entries">
 
-      <article class="entry" id="disjointed">
+      <article class="entry" id="disjointed" data-keys="dağınık hükümet parçalı hükümet siyasi istikrar pp politik güç teslim limiti seçim demokrat komünist faşist kralcı bonapartist napolyon">
         <div class="entry-head"><h3>Disjointed Government</h3><span class="chip ok">Kaldırılabilir</span></div>
         <div class="effects"><span class="fx">Günlük PP −0,80</span><span class="fx">İstikrar −%25</span><span class="fx">Teslim limiti −%15</span></div>
         <p>Oyun başında var. Halk Cephesi olayları sırasında değerleri biraz değişebilir. Seçtiğin yola göre şu focus bunu tamamen kaldırır:</p>
@@ -131,7 +152,7 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
         <p class="note">The Napoleon Referendum ayrıca Weak Bonapartist Legitimacy verir: PP maliyeti −0,25, seferberlik hızı +%10, teslim limiti +%60, danışman maliyeti −%10.</p>
       </article>
 
-      <article class="entry" id="staff">
+      <article class="entry" id="staff" data-keys="genelkurmay kurmay gamelin planlama hızı tank ordu reformu emekli eski muhafız chief of army">
         <div class="entry-head"><h3>Complacent General Staff</h3><span class="chip ok">Kaldırılabilir</span></div>
         <div class="effects"><span class="fx">Planlama hızı −%15</span><span class="fx">Ordu savunması −%7,5</span><span class="fx">Tank hızı ve saldırısı −%5</span><span class="fx">Tank maliyeti +%25</span><span class="fx">Ekipman dönüşümü −%20</span></div>
         <p>Dört adımda kalkar:</p>
@@ -144,7 +165,7 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
         <p class="note">Army Reform ayrıca Gamelin'i Chief of Army koltuğundan alır. Bir sonraki Chief of Army ataması bedava, sonrakiler 150 PP.</p>
       </article>
 
-      <article class="entry" id="economy">
+      <article class="entry" id="economy" data-keys="verimsiz ekonomi tüketim malları consumer goods fabrika tersane sivil askeri fabrika ekonomi politikası">
         <div class="entry-head"><h3>Inefficient Economy</h3><span class="chip ok">Kaldırılabilir</span></div>
         <div class="effects"><span class="fx">Tüketim malları +%40</span><span class="fx">Fabrika çıktısı −%20</span><span class="fx">Tersane çıktısı −%20</span></div>
         <p>İki yol var, birlikte de kullanılabilir:</p>
@@ -154,7 +175,7 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
         </ul>
       </article>
 
-      <article class="entry" id="strikes">
+      <article class="entry" id="strikes" data-keys="grev fabrika grevi işçi halk cephesi popular front sol sosyalist çalışma yasası">
         <div class="entry-head"><h3>Factory Strikes</h3><span class="chip part">Kısmen</span></div>
         <div class="effects"><span class="fx">Fabrika çıktısı −%50</span><span class="fx">Tersane çıktısı −%50</span></div>
         <p>Halk Cephesi seçimi kazanınca gelen olayla eklenir, oyunun başında yoktur.</p>
@@ -164,19 +185,19 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
         </ul>
       </article>
 
-      <article class="entry" id="coup">
+      <article class="entry" id="coup" data-keys="darbe seçim darbesi kralcı bonapartist">
         <div class="entry-head"><h3>Coup during the elections</h3><span class="chip ok">Kaldırılabilir</span></div>
         <div class="effects"><span class="fx">PP maliyeti +0,20</span><span class="fx">İstikrar −%10</span><span class="fx">Teslim limiti −%20</span><span class="fx">Demokrasi desteği −0,03/gün</span></div>
         <p>Kralcı ya da Bonapartist darbe olayıyla gelir ve 80 gün sürer. Süre dolunca kendiliğinden kalkar. Bonapartist yolda <span class="focus">Restore Order</span> focusu süreyi beklemeden kaldırır.</p>
       </article>
 
-      <article class="entry" id="ww1">
+      <article class="entry" id="ww1" data-keys="büyük savaş birinci dünya savaşı ww1 wwi travma yara nüfus krizi askere alma savaş desteği">
         <div class="entry-head"><h3>Scars of the Great War</h3><span class="chip part">Kısmen</span></div>
         <div class="effects"><span class="fx">Askere alma −%25</span><span class="fx">Savaş desteği −%20</span></div>
         <p>Ekonomi dalındaki <span class="focus">Laissez-Faire</span> focusundan 2 yıl sonra bir olay gelir. Bu olay debuff'ı <b>Recovering from the Great War</b> ile değiştirir; askere alma cezası kalkar, sadece −%20 savaş desteği kalır. Tamamen kaldıran bir yol şu an yok.</p>
       </article>
 
-      <article class="entry" id="modifiers">
+      <article class="entry" id="modifiers" data-keys="ordu hava deniz ceza doktrin maliyeti kara ustalığı cas hava doktrini deniz tespiti konvoy baskını askere alma">
         <div class="entry-head"><h3>Ordu, hava ve deniz cezaları</h3><span class="chip part">Kısmen</span></div>
         <p>Fransa'nın Ordu, Hava ve Deniz ulusal ruhlarında bazı bonuslar ve bazı cezalar bir arada var.</p>
         <ul>
@@ -186,19 +207,19 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
         </ul>
       </article>
 
-      <article class="entry" id="tensions">
+      <article class="entry" id="tensions" data-keys="ordu hükümet gerginliği gerilim savaş desteği ordu tecrübesi chief of army">
         <div class="entry-head"><h3>Army-Government Tensions</h3><span class="chip no">Yolu yok</span></div>
         <div class="effects"><span class="fx">Savaş desteği −%5</span><span class="fx">Ordu tecrübesi −%10</span><span class="fx">Chief of Army maliyeti +%25</span><span class="fx">Ekipman yükseltme tecrübesi +%15</span></div>
         <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var, Fransa o ağacı kullanmıyor. Chief of Army zammı Army Reform'dan sonra dengeleniyor.</p>
       </article>
 
-      <article class="entry" id="radios">
+      <article class="entry" id="radios" data-keys="radyo telsiz elektronik araştırma takviye">
         <div class="entry-head"><h3>Doctrinal Misuse of Radios</h3><span class="chip no">Yolu yok</span></div>
         <div class="effects"><span class="fx">Elektronik araştırması −%10</span><span class="fx">Takviye oranı −%3</span></div>
         <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var.</p>
       </article>
 
-      <article class="entry" id="air">
+      <article class="entry" id="air" data-keys="hava sanayi uçak sanayi avcı bombardıman uçak maliyeti hava endüstrisi">
         <div class="entry-head"><h3>Inefficient Aeronautical Industry</h3><span class="chip no">Yolu yok</span></div>
         <div class="effects"><span class="fx">Avcı / küçük gövde +%15 maliyet</span><span class="fx">Taktik bombardıman / orta gövde +%10 maliyet</span></div>
         <p>Kaldıran focuslar sadece France Expanded'ın kendi ağacında var.</p>
@@ -212,5 +233,45 @@ a:focus-visible { outline: 2px solid var(--horizon); outline-offset: 2px; }
     <p>Bu bilgiler alt modun dosyalarından çıkarıldı. Değerler olaylarla biraz değişebilir.</p>
   </footer>
 </div>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var clear = document.getElementById('clear');
+  var count = document.getElementById('count');
+  var empty = document.getElementById('empty');
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('tbody tr'));
+  var summary = document.getElementById('ozet').parentNode;
+  var hint = count.textContent;
+  function norm(s) {
+    return s.toLocaleLowerCase('tr').replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c').replace(/â/g, 'a').replace(/î/g, 'i').replace(/û/g, 'u');
+  }
+  var index = entries.map(function (el) {
+    return { el: el, id: el.id, text: norm(el.textContent + ' ' + (el.getAttribute('data-keys') || '')) };
+  });
+  function run() {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var shown = 0;
+    var ids = {};
+    index.forEach(function (it) {
+      var ok = words.every(function (w) { return it.text.indexOf(w) !== -1; });
+      it.el.hidden = !ok;
+      if (ok) { shown++; ids[it.id] = true; }
+    });
+    rows.forEach(function (r) {
+      var a = r.querySelector('a');
+      var id = a ? a.getAttribute('href').slice(1) : '';
+      r.hidden = words.length > 0 && !ids[id];
+    });
+    summary.hidden = words.length > 0 && shown === 0;
+    empty.hidden = !(words.length > 0 && shown === 0);
+    count.textContent = words.length === 0 ? hint : (shown === 0 ? 'Sonuç yok.' : shown + ' debuff bulundu.');
+  }
+  q.addEventListener('input', run);
+  clear.addEventListener('click', function () { q.value = ''; run(); q.focus(); });
+  run();
+})();
+</script>
 </body>
 </html>
